@@ -1,0 +1,24 @@
+# deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker-deployment
+spec: # deployment definition
+  replicas: 1
+  selector: # find the set of pods that needs to control
+    matchLabels:
+      component: worker
+
+  template: # pod template/spec
+    metadata:
+      labels:
+        component: worker
+    spec: # container spec
+      containers:
+        - name: worker
+          image: stephengrider/multi-worker
+          env: #enviorenment varaibles
+            - name: REDIS_HOST
+              value: redis-cluster-ip-service
+            - name: REDIS_PORT
+              value: "3679"
